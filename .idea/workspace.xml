@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="0f57b103-9abd-4b5a-8feb-8f5046cb9f0f" name="Changes" comment="" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="JpbToolWindowState">
+    <option name="myId2FirstActivated">
+      <map>
+        <entry key="com.haulmont.jpb.jpaInspector" value="true" />
+        <entry key="com.haulmont.jpb.jpaPalette" value="true" />
+        <entry key="com.haulmont.jpb.jpaStructure" value="true" />
+      </map>
+    </option>
+    <option name="myId2Visible">
+      <map>
+        <entry key="com.haulmont.jpb.jpaInspector" value="false" />
+        <entry key="com.haulmont.jpb.jpaPalette" value="false" />
+        <entry key="com.haulmont.jpb.jpaStructure" value="true" />
+      </map>
+    </option>
+  </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
+  <component name="MavenImportPreferences">
+    <option name="generalSettings">
+      <MavenGeneralSettings>
+        <option name="useMavenConfig" value="true" />
+      </MavenGeneralSettings>
+    </option>
+  </component>
+  <component name="ProjectId" id="2HaQhBVHhqVGvvjg0lg5mS0Zbj0" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "last_opened_file_path": "/Users/daniel/Desktop/SoftwareTest/Projects/final_ca1/software_test_ca1"
+  }
+}]]></component>
+  <component name="RunManager" selected="JUnit.StudyRecordTest">
+    <configuration name="StudyRecordTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="enroll-assist" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="ir.proprog.enrollassist.domain.studyRecord.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="ir.proprog.enrollassist.domain.studyRecord" />
+      <option name="MAIN_CLASS_NAME" value="ir.proprog.enrollassist.domain.studyRecord.StudyRecordTest" />
+      <option name="TEST_OBJECT" value="class" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="StudyRecordTest.isPassedShouldReturnFalse" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="enroll-assist" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="ir.proprog.enrollassist.domain.studyRecord.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="ir.proprog.enrollassist.domain.studyRecord" />
+      <option name="MAIN_CLASS_NAME" value="ir.proprog.enrollassist.domain.studyRecord.StudyRecordTest" />
+      <option name="METHOD_NAME" value="isPassedShouldReturnFalse(ir.proprog.enrollassist.domain.studyRecord.StudyRecord)" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="StudyRecordTest.isPassedShouldReturnTrue" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="enroll-assist" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="ir.proprog.enrollassist.domain.studyRecord.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="ir.proprog.enrollassist.domain.studyRecord" />
+      <option name="MAIN_CLASS_NAME" value="ir.proprog.enrollassist.domain.studyRecord.StudyRecordTest" />
+      <option name="METHOD_NAME" value="isPassedShouldReturnTrue(ir.proprog.enrollassist.domain.studyRecord.StudyRecord)" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="JUnit.StudyRecordTest" />
+        <item itemvalue="JUnit.StudyRecordTest.isPassedShouldReturnFalse" />
+        <item itemvalue="JUnit.StudyRecordTest.isPassedShouldReturnTrue" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="0f57b103-9abd-4b5a-8feb-8f5046cb9f0f" name="Changes" comment="" />
+      <created>1668520831457</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1668520831457</updated>
+    </task>
+    <servers />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+</project>
