@@ -1,8 +1,9 @@
 package ir.proprog.enrollassist.domain.enrollmentList;
 
-import ir.proprog.enrollassist.Exception.ExceptionList;
+import ir.proprog.enrollassist.domain.EnrollmentRules.EnrollmentRuleViolation;
+import ir.proprog.enrollassist.domain.EnrollmentRules.MaxCreditsLimitExceeded;
+import ir.proprog.enrollassist.domain.GraduateLevel;
 import ir.proprog.enrollassist.domain.course.Course;
-import ir.proprog.enrollassist.domain.section.ExamTime;
 import ir.proprog.enrollassist.domain.section.Section;
 import ir.proprog.enrollassist.domain.student.Student;
 import org.junit.jupiter.api.Test;
@@ -34,7 +35,7 @@ class EnrollmentListTest {
             el.addSection(s2);
             el.addSection(s3);
 
-            assertTrue(el.checkValidGPALimit().size() == 1);
+            assertEquals(1, el.checkValidGPALimit().size());
         }catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -60,7 +61,7 @@ class EnrollmentListTest {
             el.addSection(s1);
             el.addSection(s2);
 
-            assertTrue(el.checkValidGPALimit().size() == 1);
+            assertEquals(1, el.checkValidGPALimit().size());
         }catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -86,7 +87,7 @@ class EnrollmentListTest {
             el.addSection(s1);
             el.addSection(s2);
 
-            assertTrue(el.checkValidGPALimit().size() == 1);
+            assertEquals(1, el.checkValidGPALimit().size());
         }catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -116,7 +117,7 @@ class EnrollmentListTest {
             el.addSection(s2);
             el.addSection(s3);
 
-            assertTrue(el.checkValidGPALimit().size() == 0);
+            assertEquals(0, el.checkValidGPALimit().size());
         }catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -142,7 +143,7 @@ class EnrollmentListTest {
             el.addSection(s1);
             el.addSection(s2);
 
-            assertTrue(el.checkValidGPALimit().size() == 0);
+            assertEquals(0, el.checkValidGPALimit().size());
         }catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -168,7 +169,7 @@ class EnrollmentListTest {
             el.addSection(s1);
             el.addSection(s2);
 
-            assertTrue(el.checkValidGPALimit().size() == 0);
+            assertEquals(0, el.checkValidGPALimit().size());
         }catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -176,7 +177,7 @@ class EnrollmentListTest {
     }
 
     @Test
-    void checkValidGPALimitMaxCreditsLimitExceeded20ForNewStudent() {
+    void checkValidGPALimitMaxCreditsLimitExceeded20MetForNewStudent() {
 
         try {
             Student student = new Student("1111111","Undergraduate");
@@ -208,7 +209,10 @@ class EnrollmentListTest {
             el.addSections(s5);
             el.addSections(s6);
 
-            assertTrue(el.checkValidGPALimit().size() == 1);
+            assertEquals(1, el.checkValidGPALimit().size());
+
+            EnrollmentRuleViolation expectedMessage = new MaxCreditsLimitExceeded(20);
+            assertEquals(el.checkValidGPALimit().get(0).toString(), expectedMessage.toString());
 
         }catch (Exception e) {
             throw new RuntimeException(e);
@@ -217,7 +221,48 @@ class EnrollmentListTest {
     }
 
     @Test
-    void checkValidGPALimitMaxCreditsLimitExceeded20ForGradeLessThan17() {
+    void checkValidGPALimitMaxCreditsLimitExceeded20NotMetForNewStudent() {
+
+        try {
+            Student student = new Student("1111111","Undergraduate");
+            EnrollmentList el = new EnrollmentList("List 1",student);
+
+            Course c1 = new Course("2000000","Software Testing",4,"Undergraduate");
+            Section s1 = new Section(c1,"22");
+
+            Course c2 = new Course("2000002","Software Engineering",4,"Undergraduate");
+            Section s2 = new Section(c2,"25");
+
+            Course c3 = new Course("2000003","Data Base",4,"Undergraduate");
+            Section s3 = new Section(c3,"26");
+
+            Course c4 = new Course("2000004","Calculus 1",4,"Undergraduate");
+            Section s4 = new Section(c4,"27");
+
+            Course c5 = new Course("2000005","Calculus 2",4,"Undergraduate");
+            Section s5 = new Section(c5,"28");
+
+
+
+            el.addSection(s1);
+            el.addSection(s2);
+            el.addSection(s3);
+            el.addSection(s4);
+            el.addSections(s5);
+
+            assertEquals(1, el.checkValidGPALimit().size());
+            EnrollmentRuleViolation expectedMessage = new MaxCreditsLimitExceeded(14);
+            assertEquals(el.checkValidGPALimit().get(0).toString(), expectedMessage.toString());
+
+
+        }catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
+    }
+
+    @Test
+    void checkValidGPALimitMaxCreditsLimitExceeded20MetForGradeLessThan17() {
 
         try {
             Student student = new Student("1111111","Undergraduate");
@@ -252,7 +297,10 @@ class EnrollmentListTest {
             el.addSection(s5);
             el.addSection(s6);
 
-            assertTrue(el.checkValidGPALimit().size() == 1);
+            assertEquals(1, el.checkValidGPALimit().size());
+
+            EnrollmentRuleViolation expectedMessage = new MaxCreditsLimitExceeded(20);
+            assertEquals(el.checkValidGPALimit().get(0).toString(), expectedMessage.toString());
         }catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -260,7 +308,48 @@ class EnrollmentListTest {
     }
 
     @Test
-    void checkValidGPALimitMaxCreditsLimitExceeded14() {
+    void checkValidGPALimitMaxCreditsLimitExceeded20NotMetForGradeLessThan17() {
+
+        try {
+            Student student = new Student("1111111","Undergraduate");
+            EnrollmentList el = new EnrollmentList("List 1",student);
+            Course c1 = new Course("2000000","Software Testing",4,"Undergraduate");
+            Section s1 = new Section(c1,"22");
+
+            Course c2 = new Course("2000002","Software Engineering",4,"Undergraduate");
+            Section s2 = new Section(c2,"25");
+
+            Course c3 = new Course("2000003","Data Base",4,"Undergraduate");
+            Section s3 = new Section(c3,"26");
+
+            Course c4 = new Course("2000004","Computer Architecture",4,"Undergraduate");
+            Section s4 = new Section(c4,"27");
+
+            Course c5 = new Course("2000005","Digital Design",4,"Undergraduate");
+            Section s5 = new Section(c5,"28");
+
+
+            student.setGrade("00001",c1,17);
+            student.setGrade("00001",c2, 16.5);
+            student.setGrade("00001",c3, 16.5);
+            student.setGrade("00001",c4, 16.5);
+
+            el.addSection(s1);
+            el.addSection(s2);
+            el.addSection(s3);
+            el.addSection(s4);
+            el.addSection(s5);
+
+            assertEquals(0, el.checkValidGPALimit().size());
+
+        }catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
+    }
+
+    @Test
+    void checkValidGPALimitMaxCreditsLimitExceeded14Met() {
 
         try {
             Student student = new Student("1111111","Undergraduate");
@@ -286,7 +375,11 @@ class EnrollmentListTest {
             el.addSection(s3);
             el.addSection(s4);
 
-            assertTrue(el.checkValidGPALimit().size() == 1);
+            assertEquals(1, el.checkValidGPALimit().size());
+
+            EnrollmentRuleViolation expectedMessage = new MaxCreditsLimitExceeded(14);
+            assertEquals(el.checkValidGPALimit().get(0).toString(), expectedMessage.toString());
+
         }catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -294,7 +387,77 @@ class EnrollmentListTest {
     }
 
     @Test
-    void checkValidGPALimitMaxCreditsExceededForMasters() {
+    void checkValidGPALimitMaxCreditsLimitExceeded14NotMetWith14Credits() {
+
+        try {
+            Student student = new Student("1111111","Undergraduate");
+            EnrollmentList el = new EnrollmentList("List 1",student);
+            Course c1 = new Course("2000000","Software Testing",3,"Undergraduate");
+            Section s1 = new Section(c1,"22");
+
+            Course c2 = new Course("2000002","Software Engineering",3,"Undergraduate");
+            Section s2 = new Section(c2,"25");
+
+            Course c3 = new Course("2000003","Data Base",4,"Undergraduate");
+            Section s3 = new Section(c3,"26");
+
+            Course c4 = new Course("2000004","Computer Networks",4,"Undergraduate");
+            Section s4 = new Section(c4,"27");
+
+
+            student.setGrade("00001",c1,11);
+            student.setGrade("00001",c2, 11);
+
+            el.addSection(s1);
+            el.addSection(s2);
+            el.addSection(s3);
+            el.addSection(s4);
+
+            assertEquals(0, el.checkValidGPALimit().size());
+
+        }catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
+    }
+
+    @Test
+    void checkValidGPALimitMaxCreditsLimitExceeded14NotMetWithGPA12() {
+
+        try {
+            Student student = new Student("1111111","Undergraduate");
+            EnrollmentList el = new EnrollmentList("List 1",student);
+            Course c1 = new Course("2000000","Software Testing",3,"Undergraduate");
+            Section s1 = new Section(c1,"22");
+
+            Course c2 = new Course("2000002","Software Engineering",3,"Undergraduate");
+            Section s2 = new Section(c2,"25");
+
+            Course c3 = new Course("2000003","Data Base",4,"Undergraduate");
+            Section s3 = new Section(c3,"26");
+
+            Course c4 = new Course("2000004","Computer Networks",4,"Undergraduate");
+            Section s4 = new Section(c4,"27");
+
+
+            student.setGrade("00001",c1,12);
+            student.setGrade("00001",c2, 12);
+
+            el.addSection(s1);
+            el.addSection(s2);
+            el.addSection(s3);
+            el.addSection(s4);
+
+            assertEquals(0, el.checkValidGPALimit().size());
+
+        }catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
+    }
+
+    @Test
+    void checkValidGPALimitMaxCreditsExceededMetForMasters() {
 
         try {
             Student student = new Student("1111111","Masters");
@@ -321,7 +484,7 @@ class EnrollmentListTest {
             el.addSection(s4);
 
 
-            assertTrue(el.checkValidGPALimit().size() == 1);
+            assertEquals(1, el.checkValidGPALimit().size());
         }catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -329,7 +492,7 @@ class EnrollmentListTest {
     }
 
     @Test
-    void checkValidGPALimitMaxCreditsExceededForPHD() {
+    void checkValidGPALimitMaxCreditsExceededMetForPHD() {
 
         try {
             Student student = new Student("1111111","PHD");
@@ -356,7 +519,7 @@ class EnrollmentListTest {
             el.addSection(s4);
 
 
-            assertTrue(el.checkValidGPALimit().size() == 1);
+            assertEquals(1, el.checkValidGPALimit().size());
         }catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -364,7 +527,7 @@ class EnrollmentListTest {
     }
 
     @Test
-    void checkValidGPALimitMaxCreditsExceededAndGPALessThan12ForUndergraduate() {
+    void checkValidGPALimitMaxCreditsExceededAndGPALessThan12MetForUndergraduate() {
 
         try {
             Student student = new Student("1111111","Undergraduate");
@@ -402,7 +565,7 @@ class EnrollmentListTest {
             el.addSection(s6);
             el.addSection(s7);
 
-            assertTrue(el.checkValidGPALimit().size() == 2);
+            assertEquals(2, el.checkValidGPALimit().size());
         }catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -410,7 +573,7 @@ class EnrollmentListTest {
     }
 
     @Test
-    void checkValidGPALimitMaxCreditsExceededForUndergraduate() {
+    void checkValidGPALimitMaxCreditsExceededMetForUndergraduate() {
 
         try {
             Student student = new Student("1111111","Undergraduate");
@@ -448,7 +611,7 @@ class EnrollmentListTest {
             el.addSection(s6);
             el.addSection(s7);
 
-            assertTrue(el.checkValidGPALimit().size() == 1);
+            assertEquals(1, el.checkValidGPALimit().size());
         }catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -456,7 +619,7 @@ class EnrollmentListTest {
     }
 
     @Test
-    void checkValidGPALimitMaxCreditsExceededAndGPABetween12And17ForUndergraduate() {
+    void checkValidGPALimitMaxCreditsExceededAndGPABetween12And17MetForUndergraduate() {
 
         try {
             Student student = new Student("1111111","Undergraduate");
@@ -494,7 +657,14 @@ class EnrollmentListTest {
             el.addSection(s6);
             el.addSection(s7);
 
-            assertTrue(el.checkValidGPALimit().size() == 2);
+            EnrollmentRuleViolation expectedMessage1 = new MaxCreditsLimitExceeded(20);
+            assertEquals(el.checkValidGPALimit().get(0).toString(), expectedMessage1.toString());
+
+            GraduateLevel graduateLevel = GraduateLevel.valueOf("Undergraduate");
+            EnrollmentRuleViolation expectedMessage2 = new MaxCreditsLimitExceeded(graduateLevel.getMaxValidCredits());
+            assertEquals(el.checkValidGPALimit().get(1).toString(), expectedMessage2.toString());
+
+            assertEquals(2, el.checkValidGPALimit().size());
         }catch (Exception e) {
             throw new RuntimeException(e);
         }
