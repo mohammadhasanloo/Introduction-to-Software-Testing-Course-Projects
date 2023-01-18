@@ -1,0 +1,305 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <title>Coverage Report > EnrollmentList</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">ir.proprog.enrollassist.domain.enrollmentList</a>
+</div>
+
+<h1>Coverage Summary for Class: EnrollmentList (ir.proprog.enrollassist.domain.enrollmentList)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Branch, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">EnrollmentList</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    18.2%
+  </span>
+  <span class="absValue">
+    (4/22)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    14.1%
+  </span>
+  <span class="absValue">
+    (22/156)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    15.5%
+  </span>
+  <span class="absValue">
+    (16/103)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package ir.proprog.enrollassist.domain.enrollmentList;
+&nbsp;
+&nbsp;import ir.proprog.enrollassist.Exception.ExceptionList;
+&nbsp;import ir.proprog.enrollassist.domain.EnrollmentRules.*;
+&nbsp;import ir.proprog.enrollassist.domain.GraduateLevel;
+&nbsp;import ir.proprog.enrollassist.domain.studyRecord.Grade;
+&nbsp;import ir.proprog.enrollassist.domain.student.Student;
+&nbsp;import ir.proprog.enrollassist.domain.course.Course;
+&nbsp;import ir.proprog.enrollassist.domain.section.ExamTime;
+&nbsp;import ir.proprog.enrollassist.domain.section.PresentationSchedule;
+&nbsp;import ir.proprog.enrollassist.domain.section.Section;
+&nbsp;import lombok.AccessLevel;
+&nbsp;import lombok.Getter;
+&nbsp;import lombok.NoArgsConstructor;
+&nbsp;import lombok.NonNull;
+&nbsp;
+&nbsp;import javax.persistence.*;
+&nbsp;import java.util.*;
+&nbsp;
+&nbsp;@Entity
+<b class="fc">&nbsp;@NoArgsConstructor(access = AccessLevel.PROTECTED) // as required by JPA, don&#39;t use it in your code</b>
+&nbsp;@Getter
+&nbsp;public class EnrollmentList {
+&nbsp;    @Id
+&nbsp;    @GeneratedValue(strategy = GenerationType.AUTO)
+<b class="nc">&nbsp;    private Long id;</b>
+<b class="nc">&nbsp;    private String listName;</b>
+&nbsp;    @ManyToOne
+<b class="nc">&nbsp;    Student owner;</b>
+<b class="fc">&nbsp;    @ManyToMany</b>
+<b class="nc">&nbsp;    List&lt;Section&gt; sections = new ArrayList&lt;&gt;();</b>
+&nbsp;
+&nbsp;    public String isValid()
+&nbsp;    {
+<b class="nc">&nbsp;        if (listName.equals(&quot;&quot;))</b>
+<b class="nc">&nbsp;            return &quot;Enrollment list must have a name&quot;;</b>
+<b class="nc">&nbsp;        return null;</b>
+&nbsp;    }
+&nbsp;
+<b class="nc">&nbsp;    public EnrollmentList(@NonNull String listName, @NonNull Student owner) {</b>
+<b class="nc">&nbsp;        this.listName = listName;</b>
+<b class="nc">&nbsp;        this.owner = owner;</b>
+<b class="nc">&nbsp;    }</b>
+&nbsp;
+&nbsp;    public void addSections(Section... new_sections) {
+&nbsp;        //TODO: check for duplicates
+<b class="nc">&nbsp;        Collections.addAll(sections, new_sections);</b>
+<b class="nc">&nbsp;    }</b>
+&nbsp;
+&nbsp;    public void addSection(Section section) {
+<b class="fc">&nbsp;        sections.add(section);</b>
+<b class="fc">&nbsp;    }</b>
+&nbsp;
+&nbsp;    public void removeSection(Section section) {
+<b class="nc">&nbsp;        sections.remove(section);</b>
+<b class="nc">&nbsp;    }</b>
+&nbsp;
+<b class="nc">&nbsp;    public void clear() { sections.clear(); }</b>
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public boolean equals(Object o) {
+<b class="nc">&nbsp;        if (this == o) return true;</b>
+<b class="nc">&nbsp;        if (o == null || getClass() != o.getClass()) return false;</b>
+<b class="nc">&nbsp;        EnrollmentList that = (EnrollmentList) o;</b>
+<b class="nc">&nbsp;        return owner.equals(that.owner) &amp;&amp; listName.equals(that.listName);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public int hashCode() {
+<b class="nc">&nbsp;        return Objects.hash(owner, listName);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public List&lt;EnrollmentRuleViolation&gt; checkEnrollmentRules() {
+<b class="nc">&nbsp;        List&lt;EnrollmentRuleViolation&gt; violations = new ArrayList&lt;&gt;();</b>
+<b class="nc">&nbsp;        violations.addAll(checkHasPassedAllPrerequisites());</b>
+<b class="nc">&nbsp;        violations.addAll(checkHasNotAlreadyPassedCourses());</b>
+<b class="nc">&nbsp;        violations.addAll(checkNoCourseHasRequestedTwice());</b>
+<b class="nc">&nbsp;        violations.addAll(checkValidGPALimit());</b>
+<b class="nc">&nbsp;        violations.addAll(checkExamTimeConflicts());</b>
+<b class="nc">&nbsp;        violations.addAll(checkSectionScheduleConflicts());</b>
+<b class="nc">&nbsp;        return violations;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    List&lt;EnrollmentRuleViolation&gt; checkNoCourseHasRequestedTwice() {
+<b class="nc">&nbsp;        List&lt;EnrollmentRuleViolation&gt; violations = new ArrayList&lt;&gt;();</b>
+<b class="nc">&nbsp;        Set&lt;Course&gt; courses = new HashSet&lt;&gt;();</b>
+<b class="nc">&nbsp;        for (Section section : sections)</b>
+<b class="nc">&nbsp;            if (courses.contains(section.getCourse()))</b>
+<b class="nc">&nbsp;                violations.add(new CourseRequestedTwice(section.getCourse()));</b>
+&nbsp;            else
+<b class="nc">&nbsp;                courses.add(section.getCourse());</b>
+&nbsp;
+<b class="nc">&nbsp;        return violations;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;
+&nbsp;    List&lt;EnrollmentRuleViolation&gt; checkHasNotAlreadyPassedCourses() {
+<b class="nc">&nbsp;        List&lt;EnrollmentRuleViolation&gt; violations = new ArrayList&lt;&gt;();</b>
+<b class="nc">&nbsp;        for (Section sec : sections)</b>
+<b class="nc">&nbsp;            if (sec.studentHasPassedCourse(owner))</b>
+<b class="nc">&nbsp;                violations.add(new RequestedCourseAlreadyPassed(sec.getCourse()));</b>
+<b class="nc">&nbsp;        return violations;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    List&lt;EnrollmentRuleViolation&gt; checkHasPassedAllPrerequisites() {
+<b class="nc">&nbsp;        List&lt;EnrollmentRuleViolation&gt; violations = new ArrayList&lt;&gt;();</b>
+<b class="nc">&nbsp;        for (Section sec : sections)</b>
+<b class="nc">&nbsp;            violations.addAll(owner.canTake(sec.getCourse()));</b>
+&nbsp;//            violations.addAll(sec.courseCanBeTakenBy(owner));
+<b class="nc">&nbsp;        return violations;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    List&lt;EnrollmentRuleViolation&gt; checkValidGPALimit() {
+<b class="nc">&nbsp;        Grade GPA = owner.calculateGPA();</b>
+<b class="nc">&nbsp;        GraduateLevel ownerGraduateLevel = owner.getGraduateLevel();</b>
+<b class="nc">&nbsp;        int credits = sections.stream().mapToInt(section -&gt; section.getCourse().getCredits()).sum();</b>
+<b class="nc">&nbsp;        List&lt;EnrollmentRuleViolation&gt; violations = new ArrayList&lt;&gt;();</b>
+<b class="nc">&nbsp;        if(credits &lt; ownerGraduateLevel.getMinValidTermCredit())</b>
+<b class="nc">&nbsp;            violations.add(new MinCreditsRequiredNotMet(ownerGraduateLevel.getMinValidTermCredit()));</b>
+&nbsp;
+<b class="nc">&nbsp;        if (ownerGraduateLevel == GraduateLevel.Undergraduate) {</b>
+<b class="nc">&nbsp;            if(GPA.equals(Grade.ZERO) &amp;&amp; owner.getTotalTakenCredits() == 0 &amp;&amp; credits &gt; 20)</b>
+<b class="nc">&nbsp;                violations.add(new MaxCreditsLimitExceeded(20));</b>
+<b class="nc">&nbsp;            else if (credits &gt; 14 &amp;&amp; GPA.isLessThan(12))</b>
+<b class="nc">&nbsp;                violations.add(new MaxCreditsLimitExceeded(14));</b>
+<b class="nc">&nbsp;            else if (credits &gt; 20 &amp;&amp; GPA.isLessThan(17))</b>
+<b class="nc">&nbsp;                violations.add(new MaxCreditsLimitExceeded(20));</b>
+&nbsp;        }
+&nbsp;
+<b class="nc">&nbsp;        if (credits &gt; ownerGraduateLevel.getMaxValidCredits())</b>
+<b class="nc">&nbsp;            violations.add(new MaxCreditsLimitExceeded(ownerGraduateLevel.getMaxValidCredits()));</b>
+&nbsp;
+<b class="nc">&nbsp;        return violations;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;
+&nbsp;    List&lt;EnrollmentRuleViolation&gt; checkExamTimeConflicts() {
+<b class="fc">&nbsp;        List&lt;EnrollmentRuleViolation&gt; violations = new ArrayList&lt;&gt;();</b>
+<b class="fc">&nbsp;        for (int i = 0; i &lt; sections.size(); i++) {</b>
+<b class="fc">&nbsp;            Section s1 = sections.get(i);</b>
+<b class="fc">&nbsp;            if (s1.getExamTime() == null)</b>
+<b class="fc">&nbsp;                continue;</b>
+<b class="fc">&nbsp;            for (int j = i + 1; j &lt; sections.size(); j++) {</b>
+<b class="fc">&nbsp;                Section s2 = sections.get(j);</b>
+<b class="fc">&nbsp;                if (s2.getExamTime() == null)</b>
+<b class="fc">&nbsp;                    continue;</b>
+<b class="pc">&nbsp;                if (s1 != s2 &amp;&amp; s1.getExamTime().hasTimeConflict(s2.getExamTime()))</b>
+<b class="fc">&nbsp;                    violations.add(new ExamTimeCollision(s1, s2));</b>
+&nbsp;            }
+&nbsp;        }
+<b class="fc">&nbsp;        return violations;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    List&lt;EnrollmentRuleViolation&gt; checkSectionScheduleConflicts() {
+<b class="nc">&nbsp;        List&lt;EnrollmentRuleViolation&gt; violations = new ArrayList&lt;&gt;();</b>
+<b class="nc">&nbsp;        for (int i=0; i&lt;this.sections.size(); i++) {</b>
+<b class="nc">&nbsp;            for (int j=i+1; j&lt;this.sections.size(); j++) {</b>
+<b class="nc">&nbsp;                if (this.sections.get(i).equals(this.sections.get(j)))</b>
+<b class="nc">&nbsp;                    continue;</b>
+<b class="nc">&nbsp;                if (this.sections.get(i).hasScheduleConflict(this.sections.get(j)))</b>
+<b class="nc">&nbsp;                    violations.add(new ConflictOfClassSchedule(this.sections.get(i), this.sections.get(j)));</b>
+&nbsp;            }
+&nbsp;        }
+<b class="nc">&nbsp;        return violations;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public boolean makeExamTimeConflict(Section section, ExamTime examTime) throws ExceptionList {
+<b class="nc">&nbsp;        int index = this.sections.indexOf(section);</b>
+<b class="nc">&nbsp;        List&lt;EnrollmentRuleViolation&gt; preEnrollmentRuleViolations = this.checkExamTimeConflicts();</b>
+<b class="nc">&nbsp;        ExamTime preExamTime = this.sections.get(index).getExamTime();</b>
+<b class="nc">&nbsp;        this.sections.get(index).setExamTime(examTime);</b>
+<b class="nc">&nbsp;        List&lt;EnrollmentRuleViolation&gt; enrollmentRuleViolations = this.checkExamTimeConflicts();</b>
+<b class="nc">&nbsp;        this.sections.get(index).setExamTime(preExamTime);</b>
+<b class="nc">&nbsp;        if ((enrollmentRuleViolations.size() == 0) || (enrollmentRuleViolations.equals(preEnrollmentRuleViolations)))</b>
+<b class="nc">&nbsp;            return false;</b>
+<b class="nc">&nbsp;        return enrollmentRuleViolations.size() &gt;= preEnrollmentRuleViolations.size();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public boolean makePresentationScheduleConflict(Section section, List&lt;PresentationSchedule&gt; schedule) {
+<b class="nc">&nbsp;        int index = this.sections.indexOf(section);</b>
+<b class="nc">&nbsp;        List&lt;EnrollmentRuleViolation&gt; preEnrollmentRuleViolations = this.checkSectionScheduleConflicts();</b>
+<b class="nc">&nbsp;        Set&lt;PresentationSchedule&gt; prePresentationSchedule = this.sections.get(index).getPresentationSchedule();</b>
+<b class="nc">&nbsp;        this.sections.get(index).setPresentationSchedule(new HashSet&lt;&gt;(schedule));</b>
+<b class="nc">&nbsp;        List&lt;EnrollmentRuleViolation&gt; enrollmentRuleViolations = this.checkSectionScheduleConflicts();</b>
+<b class="nc">&nbsp;        this.sections.get(index).setPresentationSchedule(prePresentationSchedule);</b>
+<b class="nc">&nbsp;        if ((enrollmentRuleViolations.size() == 0) || (enrollmentRuleViolations.equals(preEnrollmentRuleViolations)))</b>
+<b class="nc">&nbsp;            return false;</b>
+<b class="nc">&nbsp;        return enrollmentRuleViolations.size() &gt;= preEnrollmentRuleViolations.size();</b>
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2022-12-06 03:14</div>
+</div>
+</body>
+</html>
