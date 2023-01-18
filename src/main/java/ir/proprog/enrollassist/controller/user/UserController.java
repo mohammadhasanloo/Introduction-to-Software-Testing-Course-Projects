@@ -47,6 +47,8 @@ public class UserController {
 
         if (exceptionList.hasException())
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, exceptionList.toString());
+        // This line should be added to create a new user
+        userRepository.save(user);
         return new UserView(user);
     }
 
